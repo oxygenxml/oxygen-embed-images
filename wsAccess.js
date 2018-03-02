@@ -31,10 +31,8 @@ var resultManager = Packages.ro.sync.exml.workspace.api.PluginWorkspaceProvider.
  * Aplication started.
  */
 function applicationStarted(pluginWorkspaceAccess) {
-    Packages.java.lang.System.err.println("Application started " + pluginWorkspaceAccess);
     menuContributor = {
         customizeAuthorPopUpMenu: function (popUp, authorAccess) {
-            Packages.java.lang.System.err.println("RIGHT CLICK" + popUp);
             try {
                 /*Create absolute reference*/
                 mi = new Packages.javax.swing.JMenuItem(menuItemName);
@@ -82,7 +80,6 @@ function applicationStarted(pluginWorkspaceAccess) {
  * Aplication closing.
  */
 function applicationClosing(pluginWorkspaceAccess) {
-    Packages.java.lang.System.err.println("Application closing " + pluginWorkspaceAccess);
 }
 
 /*
