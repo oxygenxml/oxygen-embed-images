@@ -1,7 +1,7 @@
 /*
  * The name of menu item that contains the encode action.
  */
-var menuItemName = "All images encode Base 64";
+var menuItemName = "All images embed Base 64";
 
 /*
  * Return the attribute name that contains image referances for the given element.
