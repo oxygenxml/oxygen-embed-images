@@ -1,0 +1,11 @@
+<!DOCTYPE plugin PUBLIC "-//Oxygen Plugin" "../plugin.dtd">
+<plugin
+ id="com.oxygenxml.popup.author"
+ name="oxygen-embed-images"
+ description="Plugin embeds all images referenced in DITA, Docbook or XHTML documents as base 64 encoded."
+ version="1.0"
+ vendor="Syncro Soft"
+ class="ro.sync.exml.plugin.Plugin"
+ classLoaderType="preferReferencedResources">
+ <extension type="WorkspaceAccessJS" href="wsAccess.js"/>
+</plugin>
