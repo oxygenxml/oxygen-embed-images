@@ -1,5 +1,7 @@
 # Oxygen Embed Images
-Embed all images referenced in DITA, Docbook or XHTML documents as base 64 encoded
+Embed all images referenced in DITA, Docbook or XHTML documents as base 64 encoded.
+
+This kind of plugin might be useful if for example you have an HTML, Docbook or DITA document in which you want to embed all images references in order to upload as a blog post or share via email.
 
 ## Compatibility
 This add-on is compatible with Oxygen XML Editor (or XML Author) version 18.0 or higher. 
