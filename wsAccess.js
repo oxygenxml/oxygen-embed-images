@@ -1,7 +1,7 @@
 /*
  * The name of menu item that contains the encode action.
  */
-var menuItemName = "All images embed Base 64";
+var menuItemName = "Embed all image references as base 64 encoded";
 
 /*
  * Return the attribute name that contains image referances for the given element.
@@ -48,9 +48,20 @@ function applicationStarted(pluginWorkspaceAccess) {
                         var thread = java.lang.Thread(function () {
                             if (authorDocumentNode != null) {
                                 rootNode = authorDocumentNode.getRootElement();
-                                documentController.beginCompoundEdit();
-                                iterateNodesAndEncodeImages(rootNode);
-                                documentController.endCompoundEdit();
+                                try {
+                                    javax.swing.SwingUtilities.invokeAndWait(function () {
+                                       documentController.beginCompoundEdit();
+                                    });
+                                    // Iterate over nodes and embed image as base64
+                                    iterateNodesAndEncodeImages(rootNode);
+                                    
+                                    javax.swing.SwingUtilities.invokeAndWait(function () {
+                                        documentController.endCompoundEdit();
+                                    });
+                                }
+                                catch (ex) {
+                                    Packages.java.lang.System.err.println(ex);
+                                }
                             }
                         });
                         thread.start()
@@ -78,7 +89,7 @@ function applicationClosing(pluginWorkspaceAccess) {
  * Iterate over author elements starting with the given author element
  * and encodes the images.
  */
-var iterateNodesAndEncodeImages = function thisFunc(authorElement) {
+var iterateNodesAndEncodeImages = function interateAndEncode(authorElement) {
     encodeImageBase64(authorElement)
     var childNodes = authorElement.getContentNodes();
     var i;
@@ -86,7 +97,7 @@ var iterateNodesAndEncodeImages = function thisFunc(authorElement) {
     i++) {
         var currentNode = childNodes. get (i);
         if (currentNode.getType() == Packages.ro.sync.ecss.extensions.api.node.AuthorNode.NODE_TYPE_ELEMENT) {
-            thisFunc(new JavaAdapter(Packages.ro.sync.ecss.extensions.api.node.AuthorElement, currentNode));
+            interateAndEncode(new JavaAdapter(Packages.ro.sync.ecss.extensions.api.node.AuthorElement, currentNode));
         }
     }
 };
@@ -100,7 +111,7 @@ var encodeImageBase64 = function (authorElement) {
     
     if (imageAttrName != null) {
         var href = authorElement.getAttribute(imageAttrName);
-        if (! href.getValue().isEmpty()) {
+        if (href != null && ! href.getValue().isEmpty()) {
             var absoluteHref = Packages.ro.sync.util.URLUtil.makeAbsolute(xmlBaseURL.toString(), href.getValue());
             var base64Content = createImageBase64Encoding(absoluteHref);
             if (! base64Content.isEmpty()) {

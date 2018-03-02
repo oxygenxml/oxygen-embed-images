@@ -12,4 +12,4 @@ This add-on is compatible with Oxygen XML Editor (or XML Author) version 18.0 or
 4. Select the **I accept all terms of the end user license agreement** option and click **Finish**.
 5. Restart the application.
 
-Result: A new action( **All images embed Base 64** ) will now be available in the contextual menu of **Author mode**. 
+Result: A new action( **Embed all image references as base 64 encoded** ) will now be available in the contextual menu of **Author mode**. 
