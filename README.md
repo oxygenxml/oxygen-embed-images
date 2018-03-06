@@ -15,3 +15,9 @@ This add-on is compatible with Oxygen XML Editor (or XML Author) version 19.1 or
 5. Restart the application.
 
 Result: A new action( **Embed all referenced images as Base64-encoded** ) will now be available in the contextual menu of **Author mode**. 
+
+Copyright and License
+---------------------
+Copyright 2018 Syncro Soft SRL.
+
+This project is licensed under [Apache License 2.0](https://github.com/oxygenxml/oxygen-embed-images/blob/master/LICENSE)
