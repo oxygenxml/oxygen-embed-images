@@ -3,6 +3,11 @@
  */
 var menuItemName = "Embed all referenced images as Base64-encoded";
 
+var succesfulStatus = "Embed images successful.";
+var inProgressStatus = "Embed images in progress.";
+var failStatus = "Embed images failed.";
+
+var processStatus = succesfulStatus; 
 /*
  * Return the attribute name that contains image referances for the given element.
  *
@@ -48,6 +53,7 @@ function applicationStarted(pluginWorkspaceAccess) {
                                 rootNode = authorDocumentNode.getRootElement();
                                 try {
                                     javax.swing.SwingUtilities.invokeAndWait(function () {
+                                    	pluginWorkspaceAccess.showStatusMessage(inProgressStatus);
                                        documentController.beginCompoundEdit();
                                     });
                                     // Iterate over nodes and embed image as base64
@@ -55,6 +61,7 @@ function applicationStarted(pluginWorkspaceAccess) {
                                     
                                     javax.swing.SwingUtilities.invokeAndWait(function () {
                                         documentController.endCompoundEdit();
+                                        pluginWorkspaceAccess.showStatusMessage(processStatus);
                                     });
                                 }
                                 catch (ex) {
@@ -164,7 +171,8 @@ var createImageBase64Encoding = function (imagePath) {
         }
     }
     catch (ex) {
-        if (resultManager != null) {
+    	processStatus = failStatus;
+    	if (resultManager != null) {
             try {
                 javax.swing.SwingUtilities.invokeAndWait(function () {
                     var result = new Packages.ro.sync.document.DocumentPositionedInfo(
