@@ -60,9 +60,6 @@ function applicationStarted(pluginWorkspaceAccess) {
 		// Do nothing.
 	}
 	
-	if(operationStatusEnum != null){
-		icon =  Packages.ro.sync.exml.workspace.api.OperationStatus.SUCCESSFUL;
-	}
     menuContributor = {
         customizeAuthorPopUpMenu: function (popUp, authorAccess) {
             try {
@@ -71,13 +68,19 @@ function applicationStarted(pluginWorkspaceAccess) {
                 popUp.add(mi);
                 actionPerfObj = {
                     actionPerformed: function (e) {
+                    	// Reset the status and icon
+                    	processStatus = succesfulStatus; 
+                    	if(operationStatusEnum != null){
+                    		icon =  Packages.ro.sync.exml.workspace.api.OperationStatus.SUCCESSFUL;
+                    	}
+                    	
                         documentController = authorAccess.getDocumentController();
                         var authorDocumentNode = documentController.getAuthorDocumentNode();
                         editorLocation = authorAccess.getEditorAccess().getEditorLocation();
                         
                         var thread = java.lang.Thread(function () {
                             if (authorDocumentNode != null) {
-                                rootNode = authorDocumentNode.getRootElement();
+                            	rootNode = authorDocumentNode.getRootElement();
                                 try {
                                     javax.swing.SwingUtilities.invokeAndWait(function () {
                                     	// Show a status message.
