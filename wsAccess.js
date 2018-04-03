@@ -3,11 +3,19 @@
  */
 var menuItemName = "Embed all referenced images as Base64-encoded";
 
-var succesfulStatus = "Embed images successful.";
-var inProgressStatus = "Embed images in progress.";
-var failStatus = "Embed images failed.";
+// Status messages.
+var succesfulStatus = "Images embedded successfully";
+var inProgressStatus = "Embedding images...";
+var failStatus = "Failed to embed images";
 
+// Current status message.
 var processStatus = succesfulStatus; 
+
+// Method for show a status message with a operation status icon
+var showStatusWithIcon = null;
+// Enum for identify the operation status icon
+var operationStatusEnum =  null;
+
 /*
  * Return the attribute name that contains image referances for the given element.
  *
@@ -33,9 +41,28 @@ var getImageAttr = function (authorElement) {
 var resultManager = Packages.ro.sync.exml.workspace.api.PluginWorkspaceProvider.getPluginWorkspace().getResultsManager();
 
 /*
- * Aplication started.
+ * Application started.
  */
 function applicationStarted(pluginWorkspaceAccess) {
+	try{
+		// Get the OperationStatus Enum. This is available from Oxygen 20.
+		operationStatusEnum = Packages.java.lang.Class.forName("ro.sync.exml.workspace.api.OperationStatus");
+		
+		var classes = Packages.java.lang.reflect.Array.newInstance(Packages.java.lang.Class, 2);
+		classes[0] = Packages.java.lang.Class.forName("java.lang.String");
+		classes[1] = operationStatusEnum;
+		
+		// Get the method for show a status message with a operation status icon. 
+		// This method in available from Oxygen 20.
+		var showStatusWithIcon = pluginWorkspaceAccess.getClass().getDeclaredMethod("showStatusMessage", classes);
+	} catch (e) {
+		// This exception will be catch if the method or class don't exit.
+		// Do nothing.
+	}
+	
+	if(operationStatusEnum != null){
+		icon =  Packages.ro.sync.exml.workspace.api.OperationStatus.SUCCESSFUL;
+	}
     menuContributor = {
         customizeAuthorPopUpMenu: function (popUp, authorAccess) {
             try {
@@ -53,7 +80,12 @@ function applicationStarted(pluginWorkspaceAccess) {
                                 rootNode = authorDocumentNode.getRootElement();
                                 try {
                                     javax.swing.SwingUtilities.invokeAndWait(function () {
-                                    	pluginWorkspaceAccess.showStatusMessage(inProgressStatus);
+                                    	// Show a status message.
+                                    	if(showStatusWithIcon != null && icon!= null){
+                                    		showStatusWithIcon.invoke(pluginWorkspaceAccess, inProgressStatus, icon);
+                                    	}else{
+                                    		pluginWorkspaceAccess.showStatusMessage(inProgressStatus);
+                                    	}
                                        documentController.beginCompoundEdit();
                                     });
                                     // Iterate over nodes and embed image as base64
@@ -61,7 +93,12 @@ function applicationStarted(pluginWorkspaceAccess) {
                                     
                                     javax.swing.SwingUtilities.invokeAndWait(function () {
                                         documentController.endCompoundEdit();
-                                        pluginWorkspaceAccess.showStatusMessage(processStatus);
+                                    	// Show a final status message.
+                                        if(showStatusWithIcon != null && icon!= null){
+                                    		showStatusWithIcon.invoke(pluginWorkspaceAccess, processStatus, icon);
+                                    	}else{
+                                    		pluginWorkspaceAccess.showStatusMessage(processStatus);
+                                    	}
                                     });
                                 }
                                 catch (ex) {
@@ -84,7 +121,7 @@ function applicationStarted(pluginWorkspaceAccess) {
 }
 
 /*
- * Aplication closing.
+ * Application closing.
  */
 function applicationClosing(pluginWorkspaceAccess) {
 }
@@ -172,6 +209,9 @@ var createImageBase64Encoding = function (imagePath) {
     }
     catch (ex) {
     	processStatus = failStatus;
+    	if(operationStatusEnum != null){
+    		icon = Packages.ro.sync.exml.workspace.api.OperationStatus.FAILED;
+    	}
     	if (resultManager != null) {
             try {
                 javax.swing.SwingUtilities.invokeAndWait(function () {
