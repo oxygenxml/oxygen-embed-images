@@ -4,15 +4,15 @@
 var menuItemName = "Embed all referenced images as Base64-encoded";
 
 // Status messages.
-var successfulStatus = "Images embedded successfully";
-var inProgressStatus = "Embedding images...";
-var failStatus = "Failed to embed images";
+var successfulMessage = "Images embedded successfully";
+var inProgressMessage = "Embedding images...";
+var failMessage = "Failed to embed images";
 
 // Current status message.
-var processStatus = successfulStatus; 
+var processStatusMessage = successfulMessage; 
 
 // Method for show a status message with a operation status icon
-var showStatusWithIcon = null;
+var showStatusMessageMethod = null;
 // Enum for identify the operation status icon
 var operationStatusEnum =  null;
 
@@ -54,7 +54,7 @@ function applicationStarted(pluginWorkspaceAccess) {
 		
 		// Get the method for show a status message with a operation status icon. 
 		// This method in available from Oxygen 20.
-		var showStatusWithIcon = pluginWorkspaceAccess.getClass().getDeclaredMethod("showStatusMessage", classes);
+		var showStatusMessageMethod = pluginWorkspaceAccess.getClass().getDeclaredMethod("showStatusMessage", classes);
 	} catch (e) {
 		// This exception will be catch if the method or class don't exit.
 		// Do nothing.
@@ -69,9 +69,9 @@ function applicationStarted(pluginWorkspaceAccess) {
                 actionPerfObj = {
                     actionPerformed: function (e) {
                     	// Reset the status and icon
-                    	processStatus = successfulStatus; 
+                    	processStatusMessage = successfulMessage; 
                     	if(operationStatusEnum != null){
-                    		icon =  Packages.ro.sync.exml.workspace.api.OperationStatus.SUCCESSFUL;
+                    		operationStatus =  Packages.ro.sync.exml.workspace.api.OperationStatus.SUCCESSFUL;
                     	}
                     	
                         documentController = authorAccess.getDocumentController();
@@ -84,10 +84,10 @@ function applicationStarted(pluginWorkspaceAccess) {
                                 try {
                                     javax.swing.SwingUtilities.invokeAndWait(function () {
                                     	// Show a status message.
-                                    	if(showStatusWithIcon != null && icon!= null){
-                                    		showStatusWithIcon.invoke(pluginWorkspaceAccess, inProgressStatus, icon);
+                                    	if(showStatusMessageMethod != null && operationStatus!= null){
+                                    		showStatusMessageMethod.invoke(pluginWorkspaceAccess, inProgressMessage, operationStatus);
                                     	}else{
-                                    		pluginWorkspaceAccess.showStatusMessage(inProgressStatus);
+                                    		pluginWorkspaceAccess.showStatusMessage(inProgressMessage);
                                     	}
                                        documentController.beginCompoundEdit();
                                     });
@@ -97,10 +97,10 @@ function applicationStarted(pluginWorkspaceAccess) {
                                     javax.swing.SwingUtilities.invokeAndWait(function () {
                                         documentController.endCompoundEdit();
                                     	// Show a final status message.
-                                        if(showStatusWithIcon != null && icon!= null){
-                                    		showStatusWithIcon.invoke(pluginWorkspaceAccess, processStatus, icon);
+                                        if(showStatusMessageMethod != null && operationStatus!= null){
+                                    		showStatusMessageMethod.invoke(pluginWorkspaceAccess, processStatusMessage, operationStatus);
                                     	}else{
-                                    		pluginWorkspaceAccess.showStatusMessage(processStatus);
+                                    		pluginWorkspaceAccess.showStatusMessage(processStatusMessage);
                                     	}
                                     });
                                 }
@@ -211,9 +211,9 @@ var createImageBase64Encoding = function (imagePath) {
         }
     }
     catch (ex) {
-    	processStatus = failStatus;
+    	processStatusMessage = failMessage;
     	if(operationStatusEnum != null){
-    		icon = Packages.ro.sync.exml.workspace.api.OperationStatus.FAILED;
+    		operationStatus = Packages.ro.sync.exml.workspace.api.OperationStatus.FAILED;
     	}
     	if (resultManager != null) {
             try {
