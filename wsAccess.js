@@ -4,12 +4,12 @@
 var menuItemName = "Embed all referenced images as Base64-encoded";
 
 // Status messages.
-var succesfulStatus = "Images embedded successfully";
+var successfulStatus = "Images embedded successfully";
 var inProgressStatus = "Embedding images...";
 var failStatus = "Failed to embed images";
 
 // Current status message.
-var processStatus = succesfulStatus; 
+var processStatus = successfulStatus; 
 
 // Method for show a status message with a operation status icon
 var showStatusWithIcon = null;
@@ -69,7 +69,7 @@ function applicationStarted(pluginWorkspaceAccess) {
                 actionPerfObj = {
                     actionPerformed: function (e) {
                     	// Reset the status and icon
-                    	processStatus = succesfulStatus; 
+                    	processStatus = successfulStatus; 
                     	if(operationStatusEnum != null){
                     		icon =  Packages.ro.sync.exml.workspace.api.OperationStatus.SUCCESSFUL;
                     	}
