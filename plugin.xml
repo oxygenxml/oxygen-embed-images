@@ -1,8 +1,8 @@
 <!DOCTYPE plugin PUBLIC "-//Oxygen Plugin" "../plugin.dtd">
 <plugin
- id="oxygen.expand.conrefs.keyrefs"
- name="Oxygen Expand Conrefs/Keyrefs"
- description="Plugin expands all conrefs/keyrefs referenced in a DITA Topic."
+ id="oxygen-embed-images"
+ name="Embed Images"
+ description="Embed all images referenced in DITA, Docbook or XHTML documents as base 64 encoded."
  version="1.0"
  vendor="Syncro Soft"
  class="ro.sync.exml.plugin.Plugin"
